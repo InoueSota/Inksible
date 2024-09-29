@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMoveManager : MonoBehaviour
@@ -10,8 +8,6 @@ public class PlayerMoveManager : MonoBehaviour
     // 自コンポーネント取得
     private AllObjectManager allObjectManager;
     private PlayerHitManager playerHitManager;
-
-    // 入力
     private InputManager inputManager;
     private bool isPushLeft;
     private bool isPushRight;
@@ -25,34 +21,37 @@ public class PlayerMoveManager : MonoBehaviour
     private Vector3 originPosition;
     private Vector3 nextPosition;
 
-    // 横移動
     [Header("横移動")]
     [SerializeField] private float maxSpeed;
+    [SerializeField] private float maxAcceleration;
+    [SerializeField] private float accelerationTime;
     private float moveSpeed;
+    private float acceleration;
+    private float accelerationTimer;
+    private bool canAcceleration;
     private Vector3 moveDirection;
 
-    // ジャンプ
-    private bool isJumping;
     [Header("ジャンプ")]
     [SerializeField] private float jumpDistance;
     [SerializeField] private float jumpSpeed;
+    private bool isJumping;
     private float jumpTarget;
 
-    // 滞空
-    private bool isHovering;
     [Header("滞空")]
     [SerializeField] private float hangTime;
+    [SerializeField] private float hitHeadHangTime;
+    private bool isHovering;
     private float hangTimer;
 
-    // 重力
-    private bool isGravity;
     [Header("重力")]
     [SerializeField] private float gravityMax;
     [SerializeField] private float addGravity;
+    private bool isGravity;
     private float gravityPower;
 
     void Start()
     {
+        allPlayerManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<AllPlayerManager>();
         allObjectManager = GetComponent<AllObjectManager>();
         playerHitManager = GetComponent<PlayerHitManager>();
         inputManager = GetComponent<InputManager>();
@@ -69,10 +68,6 @@ public class PlayerMoveManager : MonoBehaviour
         isJumping = false;
         isHovering = false;
         isGravity = false;
-    }
-    public void CreateInitialize(AllPlayerManager _allPlayerManager)
-    {
-        allPlayerManager = _allPlayerManager;
     }
 
     void Update()
@@ -97,7 +92,7 @@ public class PlayerMoveManager : MonoBehaviour
     {
         if (isPushLeft || isPushRight)
         {
-            moveSpeed = maxSpeed;
+            moveSpeed = maxSpeed + acceleration;
 
             if (isPushLeft)
             {
@@ -110,13 +105,38 @@ public class PlayerMoveManager : MonoBehaviour
         }
         else
         {
+            acceleration = 0f;
+            canAcceleration = false;
             moveSpeed = 0f;
+        }
+    }
+    void Acceleration()
+    {
+        if (!canAcceleration && GetIsGround())
+        {
+            accelerationTimer = accelerationTime;
+            canAcceleration = true;
+        }
+        else if (canAcceleration && !GetIsGround())
+        {
+            acceleration = 0f;
+            canAcceleration = false;
+        }
+
+        if (canAcceleration)
+        {
+            accelerationTimer -= Time.deltaTime;
+            accelerationTimer = Mathf.Clamp(accelerationTimer, 0f, accelerationTime);
+            acceleration = Mathf.Lerp(maxAcceleration, 0f, accelerationTimer / accelerationTime);
         }
     }
     void Move()
     {
         // 移動方向の修正
         CheckDirection();
+
+        // 加速
+        Acceleration();
 
         // 移動
         float deltaMoveSpeed = moveSpeed * Time.deltaTime;
@@ -135,7 +155,7 @@ public class PlayerMoveManager : MonoBehaviour
 
                     // Y軸判定
                     float yBetween = Mathf.Abs(nextPosition.y - block.transform.position.y);
-                    float yDoubleSize = halfSize.y + 0.45f;
+                    float yDoubleSize = halfSize.y + 0.25f;
 
                     if (yBetween < yDoubleSize && xBetween < xDoubleSize)
                     {
@@ -159,8 +179,26 @@ public class PlayerMoveManager : MonoBehaviour
         // ジャンプ開始と初期化
         if (!isJumping && !isHovering && !isGravity && isTriggerJump)
         {
-            jumpTarget = nextPosition.y + jumpDistance;
-            isJumping = true;
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Block"))
+            {
+                if (nextPosition.y > obj.transform.position.y)
+                {
+                    // X軸判定
+                    float xBetween = Mathf.Abs(nextPosition.x - obj.transform.position.x);
+                    float xDoubleSize = halfSize.x + 0.5f;
+
+                    // Y軸判定
+                    float yBetween = Mathf.Abs(nextPosition.y - obj.transform.position.y);
+                    float yDoubleSize = halfSize.y + 0.51f;
+
+                    if (obj.GetComponent<AllObjectManager>().GetBlockType() != allObjectManager.GetDifferentBlockType())
+                    {
+                        jumpTarget = nextPosition.y + jumpDistance;
+                        isJumping = true;
+                        break;
+                    }
+                }
+            }
         }
 
         // ジャンプ処理
@@ -186,7 +224,7 @@ public class PlayerMoveManager : MonoBehaviour
                 {
                     // X軸判定
                     float xBetween = Mathf.Abs(nextPosition.x - block.transform.position.x);
-                    float xDoubleSize = halfSize.x + 0.45f;
+                    float xDoubleSize = halfSize.x + 0.26f;
 
                     // Y軸判定
                     float yBetween = Mathf.Abs(nextPosition.y - block.transform.position.y);
@@ -197,6 +235,8 @@ public class PlayerMoveManager : MonoBehaviour
                         if (nextPosition.y < block.transform.position.y)
                         {
                             nextPosition.y = block.transform.position.y - 0.5f - halfSize.y;
+                            hangTimer = hitHeadHangTime;
+                            isHovering = true;
                             isJumping = false;
                             break;
                         }
@@ -229,11 +269,11 @@ public class PlayerMoveManager : MonoBehaviour
                     {
                         // X軸判定
                         float xBetween = Mathf.Abs(nextPosition.x - block.transform.position.x);
-                        float xDoubleSize = halfSize.x + 0.45f;
+                        float xDoubleSize = halfSize.x + 0.25f;
 
                         // Y軸判定
                         float yBetween = Mathf.Abs(nextPosition.y - block.transform.position.y);
-                        float yDoubleSize = halfSize.y + 0.5f;
+                        float yDoubleSize = halfSize.y + 0.51f;
 
                         if (yBetween <= yDoubleSize && xBetween < xDoubleSize)
                         {
@@ -267,7 +307,7 @@ public class PlayerMoveManager : MonoBehaviour
                 {
                     // X軸判定
                     float xBetween = Mathf.Abs(nextPosition.x - block.transform.position.x);
-                    float xDoubleSize = halfSize.x + 0.45f;
+                    float xDoubleSize = halfSize.x + 0.25f;
 
                     // Y軸判定
                     float yBetween = Mathf.Abs(nextPosition.y - block.transform.position.y);
@@ -303,6 +343,7 @@ public class PlayerMoveManager : MonoBehaviour
         }
     }
 
+    // Getter
     void GetInput()
     {
         isPushLeft = false;
@@ -324,5 +365,13 @@ public class PlayerMoveManager : MonoBehaviour
         {
             isTriggerJump = true;
         }
+    }
+    bool GetIsGround()
+    {
+        if (isJumping || isHovering || isGravity)
+        {
+            return false;
+        }
+        return true;
     }
 }

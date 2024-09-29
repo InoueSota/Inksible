@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AllPlayerManager : MonoBehaviour
@@ -13,8 +11,8 @@ public class AllPlayerManager : MonoBehaviour
     private bool isTriggerSpecial;
 
     // ä«óùëŒè€
-    private GameObject player1Obj;
-    private GameObject player2Obj;
+    [SerializeField] private GameObject player1Obj;
+    [SerializeField] private GameObject player2Obj;
     private PlayerMoveManager player1MoveManager;
     private PlayerMoveManager player2MoveManager;
     private PlayerGoalManager player1GoalManager;
@@ -39,15 +37,13 @@ public class AllPlayerManager : MonoBehaviour
     void Start()
     {
         inputManager = GetComponent<InputManager>();
+        Initialize();
 
         isPlayer1Active = false;
         isPlayer2Active = false;
     }
-    public void Initialize(GameObject _player1Obj, GameObject _player2Obj)
+    public void Initialize()
     {
-        player1Obj = _player1Obj;
-        player2Obj = _player2Obj;
-
         player1MoveManager = player1Obj.GetComponent<PlayerMoveManager>();
         player2MoveManager = player2Obj.GetComponent<PlayerMoveManager>();
         player1GoalManager = player1Obj.GetComponent<PlayerGoalManager>();
@@ -75,7 +71,7 @@ public class AllPlayerManager : MonoBehaviour
                 if (isPlayer1Active && isTriggerSpecial && !player2GoalManager.GetIsGoal())
                 {
                     isPlayer1Active = false;
-                    soulManager.SetStart(player1AllObjectManager.GetBlockType(), player1Obj.transform.position, player2Obj.transform.position, gameManager.GetColor1());
+                    soulManager.SetStart(player1AllObjectManager.GetBlockType(), player1Obj.transform.position, player2Obj.transform.position, gameManager.GetColor(1));
                 }
 
                 break;
@@ -84,7 +80,7 @@ public class AllPlayerManager : MonoBehaviour
                 if (isPlayer2Active && isTriggerSpecial && !player1GoalManager.GetIsGoal())
                 {
                     isPlayer2Active = false;
-                    soulManager.SetStart(player2AllObjectManager.GetBlockType(), player2Obj.transform.position, player1Obj.transform.position, gameManager.GetColor2());
+                    soulManager.SetStart(player2AllObjectManager.GetBlockType(), player2Obj.transform.position, player1Obj.transform.position, gameManager.GetColor(2));
                 }
 
                 break;

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GlobalVariables : MonoBehaviour
@@ -14,6 +12,7 @@ public class GlobalVariables : MonoBehaviour
     public static string nextStageName = "Stage1";
 
     // êF
+    public static int colorNum = 0;
     public static Color color1;
     public static Color color2;
 }

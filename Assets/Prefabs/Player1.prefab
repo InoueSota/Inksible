@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 7777308294055342473}
   - component: {fileID: 5551467270321061041}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 534255251afddde4f97a97fed21b8139, type: 3}
-  m_Color: {r: 0.23921567, g: 0.814135, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -104,13 +104,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a33fbe22c50423040b30bd9cbf38ac3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allPlayerManager: {fileID: 0}
-  maxSpeed: 5
+  maxSpeed: 3.7
+  maxAcceleration: 2.2
+  accelerationTime: 0.6
   jumpDistance: 2
-  jumpSpeed: 9
+  jumpSpeed: 10
   hangTime: 0.1
-  gravityMax: 15
-  addGravity: 35
+  hitHeadHangTime: 0.3
+  gravityMax: 12
+  addGravity: 25
 --- !u!114 &-4829408712324423902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,7 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 132b127a2fb99414da3449b0a7adfc7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goalTransform: {fileID: 0}
 --- !u!114 &1259727421348154007
 MonoBehaviour:
   m_ObjectHideFlags: 0

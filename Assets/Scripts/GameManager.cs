@@ -1,13 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    // 入力
+    // 自コンポーネント取得
+    private AllPlayerManager allPlayerManager;
     private InputManager inputManager;
     private bool isTriggerReset;
+
+    // 他コンポーネント取得
+    private ColorData colorData;
 
     // フラグ類
     private bool isStart;
@@ -36,7 +38,6 @@ public class GameManager : MonoBehaviour
 
     // プレイヤー
     [Header("プレイヤー")]
-    [SerializeField] private AllPlayerManager allPlayerManager;
     [SerializeField] private SoulManager soulManager;
 
     // ゴール
@@ -45,8 +46,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpriteRenderer color2SquareSpriteRenderer;
     [SerializeField] private ChangeLineManager changeLineManager;
 
+    void Awake()
+    {
+        // 色データの取得
+        colorData = new ColorData();
+        colorData = colorData.LoadColorData();
+
+        // 色代入
+        color1 = colorData.GetMainColor(colorData, GlobalVariables.colorNum);
+        color2 = colorData.GetSubColor(colorData, GlobalVariables.colorNum);
+        GlobalVariables.color1 = color1;
+        GlobalVariables.color2 = color2;
+    }
     void Start()
     {
+        allPlayerManager = GetComponent<AllPlayerManager>();
         inputManager = GetComponent<InputManager>();
 
         readyTimer = 2f;
@@ -57,10 +71,6 @@ public class GameManager : MonoBehaviour
         // 名前代入
         GlobalVariables.retryStageName = thisStageName;
         GlobalVariables.nextStageName = nextStageName;
-
-        // 色代入
-        GlobalVariables.color1 = color1;
-        GlobalVariables.color2 = color2;
 
         // グローバル変数の初期化
         GlobalVariables.isClear = false;
@@ -183,12 +193,16 @@ public class GameManager : MonoBehaviour
             isTriggerReset = true;
         }
     }
-    public Color GetColor1()
+    public Color GetColor(int _num)
     {
+        if (_num == 1)
+        {
+            return color1;
+        }
+        else if (_num == 2)
+        {
+            return color2;
+        }
         return color1;
-    }
-    public Color GetColor2()
-    {
-        return color2;
     }
 }

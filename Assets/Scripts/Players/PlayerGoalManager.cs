@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerGoalManager : MonoBehaviour
@@ -11,7 +9,7 @@ public class PlayerGoalManager : MonoBehaviour
     private bool isGoal;
 
     // ゴールオブジェクト
-    private Transform goalTransform;
+    private Vector3 goalPosition;
     private Vector2 goalHalfSize;
 
     void Start()
@@ -19,19 +17,16 @@ public class PlayerGoalManager : MonoBehaviour
         halfSize.x = transform.localScale.x * 0.5f;
         halfSize.y = transform.localScale.y * 0.5f;
 
+        goalPosition = new(8.25f, -0.5f, 0f);
+        goalHalfSize.x = 1.25f;
+        goalHalfSize.y = 1.25f;
+
         isGoal = false;
     }
     public void Initialize()
     {
         isGoal = false;
     }
-    public void CreateInitialize(Transform _goalTransform)
-    {
-        goalTransform = _goalTransform;
-        goalHalfSize.x = goalTransform.localScale.x * 0.5f;
-        goalHalfSize.y = goalTransform.localScale.y * 0.5f;
-    }
-
 
     void LateUpdate()
     {
@@ -43,7 +38,7 @@ public class PlayerGoalManager : MonoBehaviour
         if (!isGoal)
         {
             float thisRightX = transform.position.x + halfSize.x;
-            float goalLeftX = goalTransform.position.x - goalHalfSize.x;
+            float goalLeftX = goalPosition.x - goalHalfSize.x;
 
             if (goalLeftX < thisRightX)
             {

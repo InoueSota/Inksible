@@ -1,37 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
+    // 自コンポーネント取得
+    private SpriteRenderer spriteRenderer;
+
+    // 他コンポーネント取得
+    private GameManager gameManager;
+
     // タイプ
     public enum ColorType
     {
         COLOR1,
         COLOR2
     }
-    private ColorType colorType;
-
-    // 自コンポーネント取得
-    private SpriteRenderer spriteRenderer;
+    [SerializeField] private ColorType colorType;
 
     // 色
     private Color color;
 
-    void Update()
+    void Start()
     {
-        
-    }
+        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+        color = gameManager.GetColor((int)colorType + 1);
 
-    // Setter
-    public void Initialize(ColorType _colorType, Color _color)
-    {
-        colorType = _colorType;
-        color = _color;
+        // リサイズ
+        transform.localScale = new(0.5f, 0.5f, 1f);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = color;
     }
+    
+    // Setter
     public void SetIsActive(bool _isActive)
     {
         if (_isActive)

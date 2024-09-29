@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -40,8 +38,8 @@ public class InputManager : MonoBehaviour
         preInputReset = inputReset;
         preInputCancel = inputCancel;
 
-        inputHorizontal = Input.GetAxis("Horizontal");
-        inputVertical = Input.GetAxis("Vertical");
+        inputHorizontal = Input.GetAxisRaw("Horizontal");
+        inputVertical = Input.GetAxisRaw("Vertical");
         inputJump = (int)Input.GetAxisRaw("Jump");
         inputSpecial = (int)Input.GetAxisRaw("Special");
         inputReset = (int)Input.GetAxisRaw("Reset");

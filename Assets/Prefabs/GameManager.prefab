@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 214307120826066163}
-  - component: {fileID: -9098429676211750658}
   - component: {fileID: 8794275818097459329}
+  - component: {fileID: 5496859256453057132}
+  - component: {fileID: -9098429676211750658}
   - component: {fileID: -978410620027326278}
   m_Layer: 0
   m_Name: GameManager
@@ -26,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3335898898718756779}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34,18 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-9098429676211750658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3335898898718756779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a20761818e3e64a41b46b481d1ef0c75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8794275818097459329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,10 +56,38 @@ MonoBehaviour:
   groupClearObj: {fileID: 0}
   clearInkColor1: []
   clearInkColor2: []
-  allPlayerManager: {fileID: 0}
-  changeLineManager: {fileID: 0}
+  soulManager: {fileID: 0}
   color1SquareSpriteRenderer: {fileID: 0}
   color2SquareSpriteRenderer: {fileID: 0}
+  changeLineManager: {fileID: 0}
+--- !u!114 &5496859256453057132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3335898898718756779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1243af0be970faa45be1fbc0a0397170, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 8794275818097459329}
+  soulManager: {fileID: 0}
+  player1Obj: {fileID: 0}
+  player2Obj: {fileID: 0}
+--- !u!114 &-9098429676211750658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3335898898718756779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a20761818e3e64a41b46b481d1ef0c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-978410620027326278
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectColorManager : MonoBehaviour
@@ -27,8 +25,8 @@ public class ObjectColorManager : MonoBehaviour
         allObjectManager = GetComponent<AllObjectManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        color1 = gameManager.GetColor1();
-        color2 = gameManager.GetColor2();
+        color1 = gameManager.GetColor(1);
+        color2 = gameManager.GetColor(2);
         translucentColor1 = color1;
         translucentColor2 = color2;
         translucentColor1.a = 0.5f;
