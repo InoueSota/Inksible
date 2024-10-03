@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 214307120826066163}
   - component: {fileID: 8794275818097459329}
+  - component: {fileID: 2269680626699294015}
+  - component: {fileID: 3584273122489799120}
   - component: {fileID: 5496859256453057132}
   - component: {fileID: -9098429676211750658}
   - component: {fileID: -978410620027326278}
@@ -51,8 +53,6 @@ MonoBehaviour:
   nextStageName: 
   color1: {r: 1, g: 0.2, b: 0.6, a: 1}
   color2: {r: 1, g: 0, b: 1, a: 1}
-  inkColor1: {fileID: 0}
-  inkColor2: {fileID: 0}
   groupClearObj: {fileID: 0}
   clearInkColor1: []
   clearInkColor2: []
@@ -60,6 +60,41 @@ MonoBehaviour:
   color1SquareSpriteRenderer: {fileID: 0}
   color2SquareSpriteRenderer: {fileID: 0}
   changeLineManager: {fileID: 0}
+--- !u!114 &2269680626699294015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3335898898718756779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3bf00e41757d04bb2bad68e06bb502, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intervalTime: 2
+  menuBackImage: {fileID: 0}
+  darkColor: {r: 0, g: 0, b: 0, a: 0.5019608}
+  menuTabRect: {fileID: 0}
+  menuContentsDiff: 50
+  chasePower: 12
+  returnRect: {fileID: 0}
+  restartRect: {fileID: 0}
+  stageSelectRect: {fileID: 0}
+  stageNumberRect: {fileID: 0}
+--- !u!114 &3584273122489799120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3335898898718756779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7af4f469854a14343927133ca5860954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  darkColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &5496859256453057132
 MonoBehaviour:
   m_ObjectHideFlags: 0

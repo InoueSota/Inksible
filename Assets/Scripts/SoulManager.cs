@@ -114,7 +114,7 @@ public class SoulManager : MonoBehaviour
             if (collision.GetComponent<AllObjectManager>().GetBlockType() == AllObjectManager.BlockType.WHITE)
             {
                 collision.GetComponent<AllObjectManager>().SetBlockType(allObjectManager.GetBlockType());
-                collision.GetComponent<Animator>().SetTrigger("Start");
+                collision.GetComponent<Animator>().SetTrigger("Change");
             }
         }
         else if (collision.CompareTag("Item"))

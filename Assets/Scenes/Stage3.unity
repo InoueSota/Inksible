@@ -543,7 +543,7 @@ PrefabInstance:
     - target: {fileID: -3286548558944440704, guid: e0fd62c5f2bcc4d48b60dd38b68314f0, type: 3}
       propertyPath: allPlayerManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1516648619}
     - target: {fileID: 4847549304176705590, guid: e0fd62c5f2bcc4d48b60dd38b68314f0, type: 3}
       propertyPath: m_Name
       value: Soul
@@ -1598,6 +1598,17 @@ PrefabInstance:
       objectReference: {fileID: 471929213}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4145307852d42f4e9857c4542ef25c2, type: 3}
+--- !u!114 &1516648619 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5496859256453057132, guid: d4145307852d42f4e9857c4542ef25c2, type: 3}
+  m_PrefabInstance: {fileID: 1516648618}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1243af0be970faa45be1fbc0a0397170, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1516651743 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4844497350187009062, guid: e3a93ed274c3f4248865a9abc5bdcda9, type: 3}

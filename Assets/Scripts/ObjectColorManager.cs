@@ -29,8 +29,8 @@ public class ObjectColorManager : MonoBehaviour
         color2 = gameManager.GetColor(2);
         translucentColor1 = color1;
         translucentColor2 = color2;
-        translucentColor1.a = 0.5f;
-        translucentColor2.a = 0.5f;
+        translucentColor1.a = 0.35f;
+        translucentColor2.a = 0.35f;
     }
 
     void Update()

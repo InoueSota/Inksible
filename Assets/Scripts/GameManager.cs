@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     // 自コンポーネント取得
     private AllPlayerManager allPlayerManager;
+    private MenuManager menuManager;
     private InputManager inputManager;
     private bool isTriggerReset;
 
@@ -30,8 +31,6 @@ public class GameManager : MonoBehaviour
 
     // UI
     [Header("UI")]
-    [SerializeField] private Image inkColor1;
-    [SerializeField] private Image inkColor2;
     [SerializeField] private GameObject groupClearObj;
     [SerializeField] private Image[] clearInkColor1;
     [SerializeField] private Image[] clearInkColor2;
@@ -61,12 +60,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         allPlayerManager = GetComponent<AllPlayerManager>();
+        menuManager = GetComponent<MenuManager>();
         inputManager = GetComponent<InputManager>();
 
         readyTimer = 2f;
-
-        inkColor1.color = color1;
-        inkColor2.color = color2;
 
         // 名前代入
         GlobalVariables.retryStageName = thisStageName;
@@ -82,12 +79,20 @@ public class GameManager : MonoBehaviour
     {
         GetInput();
 
+        Menu();
         Ready();
         CheckGoal();
-
-        Restart();
     }
 
+    void Menu()
+    {
+        // メニューを開く / 閉じる
+        if (isTriggerReset && !isClear)
+        {
+            allPlayerManager.SetIsActive(menuManager.GetIsMenuActive());
+            menuManager.SetIsMenuActive();
+        }
+    }
     void Ready()
     {
         if (!isStart)
@@ -95,7 +100,7 @@ public class GameManager : MonoBehaviour
             readyTimer -= Time.deltaTime;
             if (readyTimer <= 0f)
             {
-                allPlayerManager.StartInitialize();
+                allPlayerManager.StartInitialize(!menuManager.GetIsMenuActive());
                 isStart = true;
             }
         }
@@ -140,43 +145,40 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    void Restart()
+    public void Restart()
     {
-        if (isTriggerReset && isStart && !isClear)
+        // プレイヤー初期化
+        allPlayerManager.PlayersInitialize();
+        soulManager.Initialize();
+
+        // ブロック初期化
+        foreach (GameObject block in GameObject.FindGameObjectsWithTag("Block"))
         {
-            // プレイヤー初期化
-            allPlayerManager.PlayersInitialize();
-            soulManager.Initialize();
-
-            // ブロック初期化
-            foreach (GameObject block in GameObject.FindGameObjectsWithTag("Block"))
+            if (block.GetComponent<AllObjectManager>().GetBlockType() == AllObjectManager.BlockType.COLOR1 ||
+                block.GetComponent<AllObjectManager>().GetBlockType() == AllObjectManager.BlockType.COLOR2)
             {
-                if (block.GetComponent<AllObjectManager>().GetBlockType() == AllObjectManager.BlockType.COLOR1 ||
-                    block.GetComponent<AllObjectManager>().GetBlockType() == AllObjectManager.BlockType.COLOR2)
-                {
-                    block.GetComponent<AllObjectManager>().SetBlockType(AllObjectManager.BlockType.WHITE);
-                    block.GetComponent<ObjectColorManager>().SetIsActive(true);
-                }
+                block.GetComponent<AllObjectManager>().SetBlockType(AllObjectManager.BlockType.WHITE);
+                block.GetComponent<ObjectColorManager>().SetIsActive(true);
             }
-
-            // アイテム初期化
-            foreach (GameObject item in GameObject.FindGameObjectsWithTag("Item"))
-            {
-                item.GetComponent<ItemManager>().SetIsActive(true);
-            }
-
-            // ゴール初期化
-            changeLineManager.gameObject.SetActive(true);
-            changeLineManager.Initialize();
-
-            color1SquareSpriteRenderer.color = Color.white;
-            color2SquareSpriteRenderer.color = Color.white;
-
-            // グローバル変数の初期化
-            GlobalVariables.isClear = false;
-            GlobalVariables.isGetItem1 = false;
-            GlobalVariables.isGetItem2 = false;
         }
+
+        // アイテム初期化
+        foreach (GameObject item in GameObject.FindGameObjectsWithTag("Item"))
+        {
+            item.GetComponent<ItemManager>().SetIsActive(true);
+        }
+
+        // ゴール初期化
+        changeLineManager.gameObject.SetActive(true);
+        changeLineManager.Initialize();
+
+        color1SquareSpriteRenderer.color = Color.white;
+        color2SquareSpriteRenderer.color = Color.white;
+
+        // グローバル変数の初期化
+        GlobalVariables.isClear = false;
+        GlobalVariables.isGetItem1 = false;
+        GlobalVariables.isGetItem2 = false;
     }
 
     public void FinishChangeLine()
@@ -184,6 +186,13 @@ public class GameManager : MonoBehaviour
         allPlayerManager.ChangePlayerActive();
     }
 
+    // Setter
+    public void SetPlayerAcitve(bool _isActive)
+    {
+        allPlayerManager.SetIsActive(_isActive);
+    }
+
+    // Getter
     void GetInput()
     {
         isTriggerReset = false;

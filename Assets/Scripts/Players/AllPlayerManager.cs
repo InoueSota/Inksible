@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class AllPlayerManager : MonoBehaviour
 {
+    // 自コンポーネント取得
+    private InputManager inputManager;
+    private bool isTriggerSpecial;
+
     // 他コンポーネント取得
     [SerializeField] private GameManager gameManager;
     [SerializeField] private SoulManager soulManager;
-
-    // 入力
-    private InputManager inputManager;
-    private bool isTriggerSpecial;
 
     // 管理対象
     [SerializeField] private GameObject player1Obj;
@@ -31,6 +31,7 @@ public class AllPlayerManager : MonoBehaviour
     private ActivePlayer activePlayer = ActivePlayer.PLAYER1;
 
     // フラグ
+    private bool isActive;
     private bool isPlayer1Active;
     private bool isPlayer2Active;
 
@@ -39,6 +40,7 @@ public class AllPlayerManager : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         Initialize();
 
+        isActive = false;
         isPlayer1Active = false;
         isPlayer2Active = false;
     }
@@ -130,28 +132,36 @@ public class AllPlayerManager : MonoBehaviour
 
     public void ChangePlayerActive()
     {
-        switch (activePlayer)
+        if (isActive)
         {
-            case ActivePlayer.PLAYER1:
+            switch (activePlayer)
+            {
+                case ActivePlayer.PLAYER1:
 
-                isPlayer2Active = true;
-                AllObjectChangeAlpha();
-                activePlayer = ActivePlayer.PLAYER2;
+                    isPlayer2Active = true;
+                    AllObjectChangeAlpha();
+                    activePlayer = ActivePlayer.PLAYER2;
 
-                break;
-            case ActivePlayer.PLAYER2:
+                    break;
+                case ActivePlayer.PLAYER2:
 
-                isPlayer1Active = true;
-                AllObjectChangeAlpha();
-                activePlayer = ActivePlayer.PLAYER1;
+                    isPlayer1Active = true;
+                    AllObjectChangeAlpha();
+                    activePlayer = ActivePlayer.PLAYER1;
 
-                break;
+                    break;
+            }
         }
     }
-    public void StartInitialize()
+    public void StartInitialize(bool _isActive)
     {
+        isActive = _isActive;
         isPlayer1Active = true;
         isPlayer2Active = false;
+    }
+    public void SetIsActive(bool _isActive)
+    {
+        isActive = _isActive;
     }
 
     void GetInput()
@@ -165,13 +175,16 @@ public class AllPlayerManager : MonoBehaviour
     }
     public bool GetIsPlayerActive(PlayerMoveManager _playerMoveManager)
     {
-        if (_playerMoveManager == player1MoveManager)
+        if (isActive)
         {
-            return isPlayer1Active;
-        }
-        else if (_playerMoveManager == player2MoveManager)
-        {
-            return isPlayer2Active;
+            if (_playerMoveManager == player1MoveManager)
+            {
+                return isPlayer1Active;
+            }
+            else if (_playerMoveManager == player2MoveManager)
+            {
+                return isPlayer2Active;
+            }
         }
         return false;
     }

@@ -159,6 +159,8 @@ public class PlayerMoveManager : MonoBehaviour
 
                     if (yBetween < yDoubleSize && xBetween < xDoubleSize)
                     {
+                        playerHitManager.ChangeColor(block, false);
+
                         if (block.transform.position.x < nextPosition.x)
                         {
                             nextPosition.x = block.transform.position.x + 0.5f + halfSize.x;
@@ -179,20 +181,22 @@ public class PlayerMoveManager : MonoBehaviour
         // ジャンプ開始と初期化
         if (!isJumping && !isHovering && !isGravity && isTriggerJump)
         {
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Block"))
+            foreach (GameObject block in GameObject.FindGameObjectsWithTag("Block"))
             {
-                if (nextPosition.y > obj.transform.position.y)
+                if (nextPosition.y > block.transform.position.y)
                 {
                     // X軸判定
-                    float xBetween = Mathf.Abs(nextPosition.x - obj.transform.position.x);
+                    float xBetween = Mathf.Abs(nextPosition.x - block.transform.position.x);
                     float xDoubleSize = halfSize.x + 0.5f;
 
                     // Y軸判定
-                    float yBetween = Mathf.Abs(nextPosition.y - obj.transform.position.y);
+                    float yBetween = Mathf.Abs(nextPosition.y - block.transform.position.y);
                     float yDoubleSize = halfSize.y + 0.51f;
 
-                    if (obj.GetComponent<AllObjectManager>().GetBlockType() != allObjectManager.GetDifferentBlockType())
+                    if (block.GetComponent<AllObjectManager>().GetBlockType() != allObjectManager.GetDifferentBlockType())
                     {
+                        playerHitManager.ChangeColor(block, true);
+
                         jumpTarget = nextPosition.y + jumpDistance;
                         isJumping = true;
                         break;
@@ -234,6 +238,8 @@ public class PlayerMoveManager : MonoBehaviour
                     {
                         if (nextPosition.y < block.transform.position.y)
                         {
+                            playerHitManager.ChangeColor(block, true);
+
                             nextPosition.y = block.transform.position.y - 0.5f - halfSize.y;
                             hangTimer = hitHeadHangTime;
                             isHovering = true;
@@ -279,8 +285,9 @@ public class PlayerMoveManager : MonoBehaviour
                         {
                             if (nextPosition.y > block.transform.position.y)
                             {
+                                playerHitManager.ChangeColor(block, true);
+
                                 noBlock = false;
-                                break;
                             }
                         }
                     }
@@ -317,6 +324,8 @@ public class PlayerMoveManager : MonoBehaviour
                     {
                         if (nextPosition.y > block.transform.position.y)
                         {
+                            playerHitManager.ChangeColor(block, true);
+
                             nextPosition.y = block.transform.position.y + 0.5f + halfSize.y;
                             isGravity = false;
                             break;
