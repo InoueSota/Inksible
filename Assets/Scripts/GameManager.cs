@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,31 +20,32 @@ public class GameManager : MonoBehaviour
     // 時間
     private float readyTimer;
 
-    // 名前
     [Header("名前")]
     [SerializeField] private string thisStageName;
     [SerializeField] private string nextStageName;
 
-    // 色
     [Header("色")]
     [SerializeField] private Color color1;
     [SerializeField] private Color color2;
 
-    // UI
     [Header("UI")]
     [SerializeField] private GameObject groupClearObj;
     [SerializeField] private Image[] clearInkColor1;
     [SerializeField] private Image[] clearInkColor2;
 
-    // プレイヤー
     [Header("プレイヤー")]
     [SerializeField] private SoulManager soulManager;
 
-    // ゴール
     [Header("ゴール")]
     [SerializeField] private SpriteRenderer color1SquareSpriteRenderer;
     [SerializeField] private SpriteRenderer color2SquareSpriteRenderer;
     [SerializeField] private ChangeLineManager changeLineManager;
+
+    [Header("開始時ブロック生成")]
+    [SerializeField] private Transform createLineTransform;
+    [SerializeField] private Ease createType;
+    private float cameraWidth;
+    private bool isCompleteCreate;
 
     void Awake()
     {
@@ -65,6 +67,10 @@ public class GameManager : MonoBehaviour
 
         readyTimer = 2f;
 
+        cameraWidth = Camera.main.ScreenToWorldPoint(new(Screen.width, 0f, 0f)).x;
+        createLineTransform.DOMoveX(cameraWidth, 1f).SetEase(createType).OnComplete(CompleteCreate);
+        isCompleteCreate = false;
+
         // 名前代入
         GlobalVariables.retryStageName = thisStageName;
         GlobalVariables.nextStageName = nextStageName;
@@ -79,11 +85,29 @@ public class GameManager : MonoBehaviour
     {
         GetInput();
 
+        CreateBlock();
         Menu();
         Ready();
         CheckGoal();
     }
 
+    void CreateBlock()
+    {
+        if (!isCompleteCreate)
+        {
+            foreach (GameObject block in GameObject.FindGameObjectsWithTag("Block"))
+            {
+                if (block.transform.position.x < createLineTransform.position.x)
+                {
+                    block.GetComponent<Animator>().SetTrigger("Start");
+                }
+            }
+        }
+    }
+    void CompleteCreate()
+    {
+        isCompleteCreate = true;
+    }
     void Menu()
     {
         // メニューを開く / 閉じる

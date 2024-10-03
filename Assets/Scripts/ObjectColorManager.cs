@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class ObjectColorManager : MonoBehaviour
 {
-    // 他コンポーネント取得
-    private GameManager gameManager;
-
     // 自コンポーネント取得
     private AllObjectManager allObjectManager;
     private SpriteRenderer spriteRenderer;
+
+    // 他コンポーネント取得
+    private GameManager gameManager;
 
     // 該当色が使われているか
     [SerializeField] private bool isActive = true;

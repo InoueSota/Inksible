@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,6 +18,12 @@ public class AllSceneManager : MonoBehaviour
 
     void Scene()
     {
+        // Rキーのみシーンのリセットを行う
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         // ウィンドウを閉じる
         if (Input.GetKeyDown(KeyCode.Escape))
         {
