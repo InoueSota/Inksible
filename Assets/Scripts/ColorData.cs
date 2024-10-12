@@ -1,63 +1,29 @@
-using System.IO;
 using UnityEngine;
 
-[System.Serializable]
 public class ColorData
 {
-    public string[] MainColor;
-    public string[] SubColor;
+    public Color[] mainColor;
+    public Color[] subColor;
 
-    public ColorData LoadColorData()
+    public void Initialize()
     {
-        StreamReader reader;
+        mainColor = new Color[3];
+        ColorUtility.TryParseHtmlString("#FF3399", out mainColor[0]);
+        ColorUtility.TryParseHtmlString("#614942", out mainColor[1]);
+        ColorUtility.TryParseHtmlString("#614942", out mainColor[2]);
 
-        #if UNITY_EDITOR
-            reader = new StreamReader("Assets/Resources/ColorData.json");
-        #else
-            reader = new StreamReader(Application.dataPath + "/StreamingAssets/ColorData.json");
-        #endif
-
-        string datastr = reader.ReadToEnd();
-        reader.Close();
-        return JsonUtility.FromJson<ColorData>(datastr);
+        subColor = new Color[3];
+        ColorUtility.TryParseHtmlString("#FF00FF", out subColor[0]);
+        ColorUtility.TryParseHtmlString("#D29C6E", out subColor[1]);
+        ColorUtility.TryParseHtmlString("#D29C6E", out subColor[2]);
     }
 
-    public void Save(ColorData _colorData)
+    public Color GetMainColor(int _num)
     {
-        string jsonstr = JsonUtility.ToJson(_colorData);
-        StreamWriter writer;
-
-        #if UNITY_EDITOR
-            writer = new StreamWriter("Assets/Resources/ColorData.json", false);
-        #else
-            writer = new StreamWriter(Application.dataPath + "/StreamingAssets/ColorData.json", false);
-        #endif
-
-        writer.WriteLine(jsonstr);
-        writer.Flush();
-        writer.Close();
+        return mainColor[_num];
     }
-
-    public Color GetMainColor(ColorData _colorData, int _num)
+    public Color GetSubColor(int _num)
     {
-        // 一時保存の色を確保する
-        Color tmpColor = Color.white;
-
-        // 色を代入する
-        ColorUtility.TryParseHtmlString(_colorData.MainColor[_num], out tmpColor);
-
-        // 変換に成功していたら各色が、失敗していたら白色が返される
-        return tmpColor;
-    }
-    public Color GetSubColor(ColorData _colorData, int _num)
-    {
-        // 一時保存の色を確保する
-        Color tmpColor = Color.white;
-
-        // 色を代入する
-        ColorUtility.TryParseHtmlString(_colorData.SubColor[_num], out tmpColor);
-
-        // 変換に成功していたら各色が、失敗していたら白色が返される
-        return tmpColor;
+        return subColor[_num];
     }
 }

@@ -41,23 +41,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpriteRenderer color2SquareSpriteRenderer;
     [SerializeField] private ChangeLineManager changeLineManager;
 
-    [Header("開始時ブロック生成")]
-    [SerializeField] private Transform createLineTransform;
-    [SerializeField] private Ease createType;
-    private float cameraWidth;
-    private bool isCompleteCreate;
-
     void Awake()
     {
         // 色データの取得
         colorData = new ColorData();
-        colorData = colorData.LoadColorData();
+        colorData.Initialize();
 
         // 色代入
-        color1 = colorData.GetMainColor(colorData, GlobalVariables.colorNum);
-        color2 = colorData.GetSubColor(colorData, GlobalVariables.colorNum);
+        color1 = colorData.GetMainColor(GlobalVariables.colorNum);
+        color2 = colorData.GetSubColor(GlobalVariables.colorNum);
         GlobalVariables.color1 = color1;
         GlobalVariables.color2 = color2;
+        
+        // 名前代入
+        GlobalVariables.retryStageName = thisStageName;
+        GlobalVariables.nextStageName = nextStageName;
     }
     void Start()
     {
@@ -66,14 +64,6 @@ public class GameManager : MonoBehaviour
         inputManager = GetComponent<InputManager>();
 
         readyTimer = 2f;
-
-        cameraWidth = Camera.main.ScreenToWorldPoint(new(Screen.width, 0f, 0f)).x;
-        createLineTransform.DOMoveX(cameraWidth, 1f).SetEase(createType).OnComplete(CompleteCreate);
-        isCompleteCreate = false;
-
-        // 名前代入
-        GlobalVariables.retryStageName = thisStageName;
-        GlobalVariables.nextStageName = nextStageName;
 
         // グローバル変数の初期化
         GlobalVariables.isClear = false;
@@ -85,29 +75,11 @@ public class GameManager : MonoBehaviour
     {
         GetInput();
 
-        CreateBlock();
         Menu();
         Ready();
         CheckGoal();
     }
 
-    void CreateBlock()
-    {
-        if (!isCompleteCreate)
-        {
-            foreach (GameObject block in GameObject.FindGameObjectsWithTag("Block"))
-            {
-                if (block.transform.position.x < createLineTransform.position.x)
-                {
-                    block.GetComponent<Animator>().SetTrigger("Start");
-                }
-            }
-        }
-    }
-    void CompleteCreate()
-    {
-        isCompleteCreate = true;
-    }
     void Menu()
     {
         // メニューを開く / 閉じる

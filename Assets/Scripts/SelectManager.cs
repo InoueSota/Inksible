@@ -1,16 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SelectManager : MonoBehaviour
 {
-    // 入力
+    // 自コンポーネント取得
     private InputManager inputManager;
     private bool isTriggerJump;
     private bool isTriggerLeft;
     private bool isTriggerRight;
+
+    // 他コンポーネント取得
+    private Transition transition;
+
+    // 時差作成
+    private float initialIntervalTime = 0.1f;
 
     // シーン名
     [SerializeField] private int stageMax;
@@ -32,6 +36,8 @@ public class SelectManager : MonoBehaviour
         {
             stageName[i - 1] = "Stage" + i.ToString();
         }
+
+        transition = GameObject.FindWithTag("Transition").GetComponent<Transition>();
     }
 
     void Update()
@@ -74,9 +80,11 @@ public class SelectManager : MonoBehaviour
     }
     void ChangeScene()
     {
-        if (isTriggerJump)
+        initialIntervalTime -= Time.deltaTime;
+
+        if (initialIntervalTime <= 0f && isTriggerJump && !transition.GetIsTransitionNow())
         {
-            SceneManager.LoadScene(stageName[stageNumber]);
+            transition.SetTransition(stageName[stageNumber]);
         }
     }
     void UiManager()

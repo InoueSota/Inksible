@@ -353,6 +353,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &226338009 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3218584830692507260, guid: e3a93ed274c3f4248865a9abc5bdcda9, type: 3}
+  m_PrefabInstance: {fileID: 4844497350893338873}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &329870776 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4844497351122414913, guid: e3a93ed274c3f4248865a9abc5bdcda9, type: 3}
@@ -1642,6 +1653,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4844497350893338877}
     - target: {fileID: 2269680626699294015, guid: d4145307852d42f4e9857c4542ef25c2, type: 3}
+      propertyPath: stageNumber
+      value: 
+      objectReference: {fileID: 226338009}
+    - target: {fileID: 2269680626699294015, guid: d4145307852d42f4e9857c4542ef25c2, type: 3}
       propertyPath: menuBackImage
       value: 
       objectReference: {fileID: 4844497350893338874}
@@ -2170,6 +2185,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4844497350056850103, guid: e3a93ed274c3f4248865a9abc5bdcda9, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 519420031}
     - target: {fileID: 4844497350694131086, guid: e3a93ed274c3f4248865a9abc5bdcda9, type: 3}
       propertyPath: m_Text
       value: '-  -'

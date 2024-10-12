@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TitleManager : MonoBehaviour
 {
-    // 入力
+    // 自コンポーネント取得
     private InputManager inputManager;
     private bool isTriggerJump;
+
+    // 他コンポーネント取得
+    private Transition transition;
 
     // 遷移シーン先名
     [SerializeField] private string nextScene;
@@ -15,6 +15,8 @@ public class TitleManager : MonoBehaviour
     void Start()
     {
         inputManager = GetComponent<InputManager>();
+
+        transition = GameObject.FindWithTag("Transition").GetComponent<Transition>();
     }
 
     void Update()
@@ -26,9 +28,9 @@ public class TitleManager : MonoBehaviour
 
     void ChangeScene()
     {
-        if (isTriggerJump)
+        if (isTriggerJump && !transition.GetIsTransitionNow())
         {
-            SceneManager.LoadScene(nextScene);
+            transition.SetTransition(nextScene);
         }
     }
 

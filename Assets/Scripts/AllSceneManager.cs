@@ -18,6 +18,16 @@ public class AllSceneManager : MonoBehaviour
 
     void Scene()
     {
+        // 色変え
+        if (GlobalVariables.colorNum > 0 && Input.GetKeyDown(KeyCode.Q))
+        {
+            GlobalVariables.colorNum = 0;
+        }
+        else if (GlobalVariables.colorNum < 1 && Input.GetKeyDown(KeyCode.W))
+        {
+            GlobalVariables.colorNum++;
+        }
+
         // Rキーのみシーンのリセットを行う
         if (Input.GetKeyDown(KeyCode.P))
         {

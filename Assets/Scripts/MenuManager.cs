@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
@@ -10,6 +9,9 @@ public class MenuManager : MonoBehaviour
     private bool isTriggerUp;
     private bool isTriggerDown;
     private bool isTriggerJump;
+
+    // 他コンポーネント取得
+    private Transition transition;
 
     public enum MenuType
     {
@@ -53,6 +55,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("ステージ番号")]
     [SerializeField] private RectTransform stageNumberRect;
+    [SerializeField] private Text stageNumber;
     private Vector3 stageNumberOrigin;
     private Vector3 stageNumberTarget;
 
@@ -81,6 +84,10 @@ public class MenuManager : MonoBehaviour
         stageNumberOrigin = stageNumberRect.localPosition;
 
         stageNumberTarget = stageNumberOrigin;
+
+        stageNumber.text = GlobalVariables.retryStageName;
+
+        transition = GameObject.FindWithTag("Transition").GetComponent<Transition>();
     }
 
     void Update()
@@ -162,10 +169,10 @@ public class MenuManager : MonoBehaviour
                     menuType = MenuType.RESTART;
                 }
 
-                if (isTriggerJump)
+                if (isTriggerJump && !transition.GetIsTransitionNow())
                 {
                     SetIsMenuActive();
-                    SceneManager.LoadScene("SelectScene");
+                    transition.SetTransition("SelectScene");
                 }
 
                 break;

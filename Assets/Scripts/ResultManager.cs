@@ -1,14 +1,16 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ResultManager : MonoBehaviour
 {
-    // 入力
+    // 自コンポーネント取得
     private InputManager inputManager;
     private bool isTriggerDecide;
     private bool isTriggerUp;
     private bool isTriggerDown;
+
+    // 他コンポーネント取得
+    private Transition transition;
 
     // フラグ類
     private bool isActiveSelect;
@@ -52,6 +54,8 @@ public class ResultManager : MonoBehaviour
         retryString = GlobalVariables.retryStageName;
         nextScene = GlobalVariables.nextStageName;
         triangleY = nextStageObj.transform.position.y;
+
+        transition = GameObject.FindWithTag("Transition").GetComponent<Transition>();
     }
 
     void Update()
@@ -133,9 +137,9 @@ public class ResultManager : MonoBehaviour
                 break;
         }
 
-        if (isTriggerDecide)
+        if (isTriggerDecide && !transition.GetIsTransitionNow())
         {
-            SceneManager.LoadScene(nextScene);
+            transition.SetTransition(nextScene);
         }
     }
     void ToRetry()

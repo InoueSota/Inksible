@@ -32,7 +32,7 @@ public class PlayerHitManager : MonoBehaviour
         if (_block.GetComponent<AllObjectManager>().GetBlockType() == AllObjectManager.BlockType.WHITE)
         {
             _block.GetComponent<AllObjectManager>().SetBlockType(allObjectManager.GetBlockType());
-            _block.GetComponent<Animator>().SetTrigger("Start");
+            _block.GetComponent<Animator>().SetTrigger("Change");
 
             ColorLine(_block.transform.position, _isVertical);
         }
