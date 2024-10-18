@@ -1,5 +1,5 @@
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SelectManager : MonoBehaviour
@@ -7,8 +7,10 @@ public class SelectManager : MonoBehaviour
     // 自コンポーネント取得
     private InputManager inputManager;
     private bool isTriggerJump;
-    private bool isTriggerLeft;
-    private bool isTriggerRight;
+    private bool isPushLeft;
+    private bool isPushRight;
+    private bool isPushUp;
+    private bool isPushDown;
 
     // 他コンポーネント取得
     private Transition transition;
@@ -21,11 +23,20 @@ public class SelectManager : MonoBehaviour
     private int stageNumber;
     private string[] stageName;
 
-    // UI
-    [Header("UI")]
+    [Header("SelectUI")]
     [SerializeField] private Text stageNumberText;
     [SerializeField] private GameObject leftTriangleObj;
     [SerializeField] private GameObject rightTriangleObj;
+    private Image leftTriangleImage;
+    private Image rightTriangleImage;
+
+    [Header("OtherUI")]
+    [SerializeField] private Image headerBackImage;
+    [SerializeField] private Image headerImage;
+
+    [Header("ステージ選択間隔の時間")]
+    [SerializeField] private float selectIntervalTime;
+    private float selectIntervalTimer;
 
     void Start()
     {
@@ -37,7 +48,18 @@ public class SelectManager : MonoBehaviour
             stageName[i - 1] = "Stage" + i.ToString();
         }
 
-        transition = GameObject.FindWithTag("Transition").GetComponent<Transition>();
+        if (GameObject.FindWithTag("Transition"))
+        {
+            transition = GameObject.FindWithTag("Transition").GetComponent<Transition>();
+        }
+
+        headerBackImage.color = GlobalVariables.color1;
+        headerImage.color = GlobalVariables.color2;
+
+        leftTriangleImage = leftTriangleObj.GetComponent<Image>();
+        rightTriangleImage = rightTriangleObj.GetComponent<Image>();
+        leftTriangleImage.color = GlobalVariables.color1;
+        rightTriangleImage.color = GlobalVariables.color1;
     }
 
     void Update()
@@ -51,31 +73,49 @@ public class SelectManager : MonoBehaviour
 
     void ChangeSelectStage()
     {
-        // ステージ番号を減算する
-        if (isTriggerLeft)
+        selectIntervalTimer -= Time.deltaTime;
+
+        if (selectIntervalTimer <= 0f && (isPushLeft || isPushRight || isPushUp || isPushDown))
         {
-            // すでに最小番号を選択していたら、最大番号にする
-            if (stageNumber == 0)
+            // ステージ番号を減算する
+            if (isPushLeft)
+            {
+                // すでに最小番号を選択していたら、最大番号にする
+                if (stageNumber == 0)
+                {
+                    stageNumber = stageMax - 1;
+                }
+                else
+                {
+                    stageNumber--;
+                }
+                leftTriangleObj.transform.DORotate(Vector3.forward * 360f, 0.5f, RotateMode.FastBeyond360).SetEase(Ease.OutExpo);
+            }
+            // ステージ番号を加算する
+            else if (isPushRight)
+            {
+                // すでに最大番号を選択していたら、最小番号にする
+                if (stageNumber == stageMax - 1)
+                {
+                    stageNumber = 0;
+                }
+                else
+                {
+                    stageNumber++;
+                }
+                rightTriangleObj.transform.DORotate(Vector3.forward * 360f, 0.5f, RotateMode.FastBeyond360).SetEase(Ease.OutExpo);
+            }
+            // ステージ番号の最大値にする
+            else if (isPushUp)
             {
                 stageNumber = stageMax - 1;
             }
-            else
-            {
-                stageNumber--;
-            }
-        }
-        // ステージ番号を加算する
-        else if (isTriggerRight)
-        {
-            // すでに最大番号を選択していたら、最小番号にする
-            if (stageNumber == stageMax - 1)
+            // ステージ番号を最小値にする
+            else if (isPushDown)
             {
                 stageNumber = 0;
             }
-            else
-            {
-                stageNumber++;
-            }
+            selectIntervalTimer = selectIntervalTime;
         }
     }
     void ChangeScene()
@@ -91,7 +131,7 @@ public class SelectManager : MonoBehaviour
     {
         // 選択レベル番号数字の処理
         int addOneStageNumber = stageNumber + 1;
-        stageNumberText.text = addOneStageNumber.ToString();
+        stageNumberText.text = "Stage" + addOneStageNumber.ToString();
 
         // レベル選択三角形の処理
         if (stageNumber == 0)
@@ -132,22 +172,35 @@ public class SelectManager : MonoBehaviour
     void GetInput()
     {
         isTriggerJump = false;
-        isTriggerLeft = false;
-        isTriggerRight = false;
+        isPushLeft = false;
+        isPushRight = false;
+        isPushUp = false;
+        isPushDown = false;
 
         if (inputManager.IsTrgger(InputManager.INPUTPATTERN.JUMP))
         {
             isTriggerJump = true;
         }
-        if (inputManager.IsTrgger(InputManager.INPUTPATTERN.HORIZONTAL))
+        if (inputManager.IsPush(InputManager.INPUTPATTERN.HORIZONTAL))
         {
             if (inputManager.ReturnInputValue(InputManager.INPUTPATTERN.HORIZONTAL) < 0f)
             {
-                isTriggerLeft = true;
+                isPushLeft = true;
             }
             else
             {
-                isTriggerRight = true;
+                isPushRight = true;
+            }
+        }
+        if (inputManager.IsPush(InputManager.INPUTPATTERN.VERTICAL))
+        {
+            if (inputManager.ReturnInputValue(InputManager.INPUTPATTERN.VERTICAL) < 0f)
+            {
+                isPushDown= true;
+            }
+            else
+            {
+                isPushUp = true;
             }
         }
     }

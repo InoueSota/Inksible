@@ -28,7 +28,7 @@ public class AllSceneManager : MonoBehaviour
             GlobalVariables.colorNum++;
         }
 
-        // Rキーのみシーンのリセットを行う
+        // Pキーのみシーンのリセットを行う
         if (Input.GetKeyDown(KeyCode.P))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
